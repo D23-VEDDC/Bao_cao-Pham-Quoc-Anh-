@@ -46,30 +46,31 @@ Cuối cùng xuất file .keras là file mô hình trích xuất đã đc huấn
 ## 1. Các hệ số (accuracy, precision, recall và f1-score)
 
 ![Đánh giá 1](images/Danh_gia_he_so.png)
-## 2. Ma trận Nhầm lẫn và Không gian Embedding bằng t-SNE
+## 2. Ma trận nhầm lẫn và Không gian Embedding bằng t-SNE
     
 ![Đánh giá 2](images/Danh_gia_ma_tran.png)
 
 ![Đánh giá 3](images/Danh_gia_SNE.png)
 ## 3. Vector trích xuất được từ ảnh
-### 3.1) Tập test thử 
+## A) Tập test thử 
 
 ![Đánh giá 4](images/Danh_gia_vector_1.png)
 ![Đánh giá 5](images/Danh_gia_vector_2.png)
-### 3.2) Tập test thực tế
-### 3 ảnh là Perfect, Fair, Defect
+## B) Tập test thực tế
+#### 3 ảnh là Perfect, Fair, Defect
     
-### Perfect và Fair khá oke nên chủ yếu so sánh Perfect với Defect 
+ Perfect và Fair khá oke nên chủ yếu so sánh Perfect với Defect 
 - Chia ảnh của Defect thành giả sử 4x4 patch và resize về [128, 128] so sánh với Perfect cx làm tương tự vậy.
 
+## Mẫu 1
 ![Ảnh UNO](images/3_anh_so_sanh.png)
     
 ![Ảnh Defect](images/Defect_sau_crop_1.png)
-### Lỗi thực tế ở Patch [0, 2] và [1, 2]
+- Lỗi thực tế ở Patch [0, 2] và [1, 2]
 
-### Lỗi kiểm thử
+- Lỗi kiểm thử:
 
-DANH SÁCH CÁC PATCH KHÁC BIỆT / CÓ DẤU HIỆU LỖI (Dưới 93.0%):
+### DANH SÁCH CÁC PATCH KHÁC BIỆT / CÓ DẤU HIỆU LỖI (Dưới 93.0%):
 #### - Patch [2] (Hàng 0, Cột 2) -> Fair: 99.71% | Defect: 78.80% 
     Vector Perfect (8 chiều đầu): [0.8244 1.479  0.     0.6524 0.     0.     0.     2.9384]
     Vector Fair    (8 chiều đầu): [0.6553 1.5464 0.     0.799  0.     0.     0.     2.7947]
@@ -85,15 +86,17 @@ DANH SÁCH CÁC PATCH KHÁC BIỆT / CÓ DẤU HIỆU LỖI (Dưới 93.0%):
     Vector Fair    (8 chiều đầu): [3.043  2.3424 0.     0.     3.1861 0.     0.     1.4879]
     Vector Defect  (8 chiều đầu): [2.8176 2.6884 0.     0.4542 3.3908 0.     0.     0.8291]
 
-> Kết luận: Bị nhầm lẫn Patch [2, 2]
+> Kết luận: Bị nhầm thêm Patch [2, 2]
 
+## Mẫu 2
 ![Ảnh UNO](images/3_anh_so_sanh_tiep.png)
 
 ![Ảnh Defect 1](images/Defect_sau_crop_2.png)
-### - Lỗi thực tế ở Patch [1, 1], [2, 1] và hơi sang [1, 0]
+- Lỗi thực tế ở Patch [1, 1], [2, 1] và hơi sang [1, 0]
 
-### - Lỗi kiểm thử
-DANH SÁCH CÁC PATCH KHÁC BIỆT / CÓ DẤU HIỆU LỖI (Dưới 93.0%):
+- Lỗi kiểm thử:
+
+### DANH SÁCH CÁC PATCH KHÁC BIỆT / CÓ DẤU HIỆU LỖI (Dưới 93.0%):
 #### - Patch [5] (Hàng 1, Cột 1) -> Fair: 98.31% | Defect: 90.86%
     Vector Perfect (8 chiều đầu): [1.3845 0.3313 0.     0.     2.3757 0.1575 0.     1.3229]
     Vector Fair    (8 chiều đầu): [1.7755 0.     0.     0.     2.5977 0.0179 0.     2.0892]
@@ -109,22 +112,22 @@ DANH SÁCH CÁC PATCH KHÁC BIỆT / CÓ DẤU HIỆU LỖI (Dưới 93.0%):
     Vector Fair    (8 chiều đầu): [3.043  2.3424 0.     0.     3.1861 0.     0.     1.4879]
     Vector Defect  (8 chiều đầu): [2.8978 2.5425 0.     0.3002 3.3226 0.     0.     1.0321]
 
-> Kết luận: Lại bị Patch [2, 2] ??
-### 3.2) Với tập test theo phương pháp Patchcore
+> Kết luận: Lại bị thêm Patch [2, 2] ??
+## C) Với tập test theo phương pháp Patchcore
 Học 10 ảnh chuẩn cắt theo 7x7 và lưu 75 vector chuẩn nhất vào Memory_Bank.
 
-ẢNH trong tập đã đc học.
+## ẢNH trong tập đã đc học.
 ![Ảnh Chuẩn 1](images/Anh_chuan_trong_anh_da_hoc.png)
 
 > => KẾT LUẬN HỆ THỐNG: OK (Đạt chuẩn)
 
-Ảnh tương tự thế nhưng ngoài tập học.
+## Ảnh tương tự thế nhưng ngoài tập học.
 ![Ảnh Chuẩn 2](images/Anh_chuan_ngoai_anh_da_hoc.png)
 
 > => KẾT LUẬN HỆ THỐNG: NG (Phát hiện lỗi cục bộ)
 Đoạn này test giảm patch xuống 6x6 5x5 thì lỗi nhận đc mạch lỗi (3-5 lỗi).
 
-Ảnh lỗi 
+## Ảnh lỗi 
 ![Ảnh lỗi](images/Anh_co_loi.png)
 
 > => KẾT LUẬN HỆ THỐNG: NG (Phát hiện lỗi cục bộ)
