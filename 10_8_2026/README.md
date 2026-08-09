@@ -116,15 +116,16 @@ Cuối cùng xuất file .keras là file mô hình trích xuất đã đc huấn
 ## C) Với tập test theo phương pháp Patchcore
 Học 10 ảnh chuẩn cắt theo 7x7 và lưu 75 vector chuẩn nhất vào Memory_Bank.
 
-## ẢNH trong tập đã đc học.
+## Ảnh trong tập đã đc học
 ![Ảnh Chuẩn 1](images/Anh_chuan_trong_anh_da_hoc.png)
 
 > => KẾT LUẬN HỆ THỐNG: OK (Đạt chuẩn)
 
-## Ảnh tương tự thế nhưng ngoài tập học.
+## Ảnh tương tự thế nhưng ngoài tập học
 ![Ảnh Chuẩn 2](images/Anh_chuan_ngoai_anh_da_hoc.png)
 
 > => KẾT LUẬN HỆ THỐNG: NG (Phát hiện lỗi cục bộ)
+
 Đoạn này test giảm patch xuống 6x6 5x5 thì lỗi nhận đc mạch lỗi (3-5 lỗi).
 
 ## Ảnh lỗi 
