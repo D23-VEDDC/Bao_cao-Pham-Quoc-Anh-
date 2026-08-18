@@ -7,8 +7,8 @@
 ![Quá trình](images/Qua_trinh_huan_luyen.png)
 
 + Kích thước đầu vào là (40 40 3) ảnh màu
-+ Tổng tham số (Total Params) là 2.426.790 params tương ứng 9.26MB
-+ Non-trainable params là 2.258.550 params tương ứng 8.61MB về phần giữ nguyên bộ trích xuất đặc trưng tống quan từ 'Imagenet'
++ Tổng tham số (Total Params) là 579.014 params tương ứng 2.21MB
++ Non-trainable params là 410.464 params tương ứng 1.57MB về phần giữ nguyên bộ trích xuất đặc trưng tống quan từ 'Imagenet'
 + Trainable params là 168.550 params tướng ứng 648.40KB nằm ở lớp GlobalAveragePooling2D, Dense, Dropout, BatchNormalization
 
 # Quá trình xây dựng và huấn luyện mô hình 
@@ -39,6 +39,27 @@
 + BatchNormalization có 1 lớp (Ổn định quá trình học bằng cách chuẩn hóa activation)
 + Dropout (Tạm thời 30% Neuron đc bỏ qua theo từng bước để giảm overfitting)
 + Softmax (Phân loại)
+
+## Theo mô hình
+
++ Cấu trúc các lớp trong MobilenetV2
+
+    Tổng số layer gốc: 154
+    + InputLayer                    : 1
+    + Conv2D                        : 35
+    + BatchNormalization            : 52
+    + ReLU                          : 35
+    + DepthwiseConv2D               : 17
+    + ZeroPadding2D                 : 4
+    + Add                           : 10
+
+    Tổng số layer thêm vào: 8
+    + InputLayer                    : 1
+    + Functional                    : 1
+    + GlobalAveragePooling2D        : 1
+    + Dense                         : 3
+    + BatchNormalization            : 1
+    + Dropout                       : 1
 
 # Nguồn từ Dataset
 
