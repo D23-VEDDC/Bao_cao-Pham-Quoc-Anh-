@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>USB Host AV Console</title>
+    <link rel="stylesheet" href="/assets/style.css?v=20260830a">
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <div class="brand">
+          <span class="mark"></span>
+          <div>
+            <div class="title-row">
+              <h1>USB Host AV Console</h1>
+            </div>
+            <p class="brand-meta">Espressif Systems</p>
+          </div>
+        </div>
+        <div class="topbar-side">
+          <div class="status">
+            <span id="audioWsStatus" class="pill warn">Audio WS offline</span>
+            <span id="usbStatus" class="pill">USB idle</span>
+          </div>
+          <p id="deviceSummary" class="status-summary">Waiting for USB audio device</p>
+        </div>
+      </header>
+
+      <section class="device">
+        <div>
+          <span>VID / PID</span>
+          <strong id="vidPid">--</strong>
+        </div>
+        <div>
+          <span>Product</span>
+          <strong id="product">--</strong>
+        </div>
+        <div>
+          <span>Interfaces</span>
+          <strong id="interfaces">--</strong>
+        </div>
+      </section>
+
+      <section class="panels">
+        <article class="panel mic-panel" id="micPanel">
+          <header>
+            <div>
+              <span class="eyebrow">Input Monitor</span>
+              <h2>Microphone</h2>
+            </div>
+            <span id="micState" class="pill">Disconnected</span>
+          </header>
+          <div class="meter-block">
+            <div class="level-row">
+              <div id="micMeter" class="meter"><span></span></div>
+              <strong id="micLevelText">0%</strong>
+            </div>
+          </div>
+          <div class="controls">
+            <label class="field">Format <select id="micFormat"></select></label>
+            <div class="volume-row">
+              <label class="field">Volume <input id="micVolume" type="range" min="0" max="100" value="80"></label>
+              <label class="switch"><input id="micMute" type="checkbox"><span>Mute</span></label>
+            </div>
+            <button id="micEnabled" class="device-power" type="button">Open</button>
+          </div>
+        </article>
+
+        <article class="panel spk-panel" id="spkPanel">
+          <header>
+            <div>
+              <span class="eyebrow">Output Generator</span>
+              <h2>Speaker</h2>
+            </div>
+            <span id="spkState" class="pill">Disconnected</span>
+          </header>
+          <div class="controls">
+            <label class="field">Format <select id="spkFormat"></select></label>
+            <div class="volume-row">
+              <label class="field">Volume <input id="spkVolume" type="range" min="0" max="100" value="80"></label>
+              <label class="switch"><input id="spkMute" type="checkbox"><span>Mute</span></label>
+            </div>
+            <button id="spkEnabled" class="device-power" type="button">Open</button>
+
+            <div class="tool-group" id="toneGroup">
+              <div class="group-title">Tone</div>
+              <div class="inline">
+                <label class="field">Hz <input id="toneFreq" type="number" min="100" max="4000" value="1000"></label>
+                <label class="field">ms <input id="toneMs" type="number" min="100" max="5000" value="1000"></label>
+              </div>
+              <button id="playTone" type="button">Play Test</button>
+            </div>
+
+            <div class="tool-group" id="fileGroup">
+              <div class="group-title">File Playback</div>
+              <label class="field file-picker">Audio File <input id="audioFile" type="file" accept="audio/*"></label>
+              <div class="file-actions">
+                <button id="playFile" type="button">Play File</button>
+                <button id="stopFile" type="button">Stop</button>
+              </div>
+              <div class="file-status">
+                <span id="fileInfo">No file selected</span>
+                <progress id="fileProgress" max="100" value="0"></progress>
+              </div>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="panel camera-panel" id="cameraPanel">
+        <header>
+          <div>
+            <span class="eyebrow">Video Monitor</span>
+            <h2>Camera</h2>
+          </div>
+          <span id="cameraState" class="pill">Disconnected</span>
+        </header>
+        <div class="camera-grid">
+          <div class="controls camera-controls">
+            <label class="field">Format <select id="cameraFormat"></select></label>
+            <label class="field">Resolution <select id="cameraResolution"></select></label>
+            <button id="cameraEnabled" class="device-power" type="button">Open</button>
+
+            <div class="tool-group" id="cropGroup">
+              <div class="group-title">Crop vùng nét</div>
+              <label class="switch"><input id="cropEnabled" type="checkbox"><span>Bật crop</span></label>
+              <p class="crop-hint">Khung đỏ AI là CỐ ĐỊNH theo độ phân giải camera và luôn chia hết cho 40x40. Không kéo/resize. Với 640x480: 16x12 = 192 patch.</p>
+              <button id="cropReset" type="button">Đồng bộ crop cố định</button>
+              <p class="crop-hint">P4 (GPIO4) = chụp thêm 1 ảnh. Có thể bấm P4 nhiều lần để gom nhiều ảnh. P3 (GPIO3) = kết thúc phiên và bắt đầu cắt patch + trích xuất vecto theo đúng thứ tự ảnh. Cả hai nút nối xuống GND.</p>
+              <div class="crop-readout" id="cropReadout"></div>
+              <div class="group-title">Cắt patch AI trên ESP32 &amp; trích xuất vecto đặc trưng</div>
+              <button id="aiPatchCapture" type="button" title="Tải lại ảnh, patch và vecto của lần xử lý gần nhất">Xem lại kết quả gần nhất</button>
+              <div class="crop-readout" id="aiSessionReadout">Chưa có phiên chụp</div>
+              <div class="crop-readout" id="aiPatchReadout">Chưa cắt patch nào</div>
+              <div class="ai-patch-grid" id="aiPatchGrid"></div>
+              <div class="crop-readout" id="aiInferReadout">Chưa trích xuất vecto đặc trưng</div>
+              <div class="ai-infer-table-wrap" id="aiInferTableWrap">
+                <table class="ai-infer-table" id="aiInferTable">
+                  <thead><tr id="aiInferTableHead"></tr></thead>
+                  <tbody id="aiInferTableBody"></tbody>
+                </table>
+              </div>
+              <a id="aiInferDownload" href="#" download="feature_vectors.json" class="ai-infer-download hidden">Tải vector của ảnh gần nhất (JSON)</a>
+            <a id="aiSessionDownload" href="#" download="multi_image_feature_vectors.json" class="ai-infer-download hidden">Tải toàn bộ vector của phiên</a>
+              <div class="group-title">PATCHCORE • Coreset / Memory Bank</div>
+              <div class="ai-coreset-summary" id="aiCoresetSummary">Chưa xây Memory Bank</div>
+              <div class="ai-coreset-table-wrap">
+                <table class="ai-coreset-table" id="aiCoresetTable">
+                  <thead><tr><th>#</th><th>Ảnh</th><th>Patch</th><th>Farthest d</th><th>V0</th><th>V1</th><th>V2</th><th>V3</th><th>V4</th><th>V5</th><th>V6</th><th>V7</th></tr></thead>
+                  <tbody id="aiCoresetTableBody"></tbody>
+                </table>
+              </div>
+              <a id="aiCoresetDownload" href="#" download="patchcore_memory_bank.json" class="ai-infer-download hidden">Tải Memory Bank (JSON)</a>
+            </div>
+          </div>
+          <div class="camera-view" id="cameraView">
+            <img id="cameraStream" alt="Camera stream">
+            <div class="crop-overlay hidden" id="cropOverlay">
+              <div class="crop-box" id="cropBox">
+                <!-- Fixed 40x40 AI grid. Geometry comes from the camera source
+                     resolution and is mirrored by app_ai_patch.c. -->
+                <div class="crop-grid-lines" id="cropGridLines"></div>
+                <div class="crop-handle" id="cropHandle"></div>
+              </div>
+            </div>
+            <div id="cameraPlaceholder" class="camera-placeholder">Camera disconnected</div>
+          </div>
+        </div>
+        <div class="crop-preview" id="cropPreviewWrap">
+          <div class="crop-preview-label">Xem trước vùng đã crop (nét hơn)</div>
+          <canvas id="cameraCanvas"></canvas>
+        </div>
+        <div class="crop-preview crop-capture" id="cropCaptureWrap">
+          <div class="crop-preview-label">Ảnh đã chụp (P4)</div>
+          <img id="cropCapturedImg" alt="Anh vung crop da chup">
+          <div class="crop-capture-actions">
+            <a id="cropCapturedDownload" href="#" download="crop_capture.jpg">Tải ảnh về máy</a>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="log">
+        <header>
+          <span class="eyebrow">Runtime</span>
+          <h2>Event Log</h2>
+        </header>
+        <pre id="log"></pre>
+      </section>
+    </main>
+    <script src="/assets/app.js?v=20260830b"></script>
+  </body>
+</html>

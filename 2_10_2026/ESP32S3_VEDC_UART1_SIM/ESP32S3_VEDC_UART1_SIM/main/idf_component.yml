@@ -1,0 +1,25 @@
+dependencies:
+  idf: ">=5.0"
+  espressif/usb_host_uac: "^1.5.0"
+  # espressif/usb_host_uvc removed: a patched local copy lives in components/usb_host_uvc
+  # (fixes the ESP32-S3 "EP MPS exceeds supported limit (408)" isochronous camera bug)
+  espressif/cjson: "^1.7"
+  # On-device JPEG decode (TJpgDec) used by the AI patch-cut feature
+  # (app_ai_patch.c) to turn a captured MJPEG frame into RGB888 pixels.
+  espressif/esp_jpeg: "^1.3.1"
+  # Runs feature_extractor_32d_full_int8.tflite on-device (app_ai_infer.cpp)
+  # to turn each 40x40 patch into a 32-d embedding vector.
+  # ESP-DSP vector math used by the AI core-set distance calculation.
+  espressif/esp-dsp: "^1.6.0"
+
+  espressif/esp-tflite-micro: "^1.4.0"
+  
+  espressif/esp-nn: "*"
+  espressif/esp_wifi_remote:
+    version: ">=0.10,<2.0"
+    rules:
+      - if: "target in [esp32p4]"
+  espressif/esp_hosted:
+    version: "2.12.3"
+    rules:
+      - if: "target in [esp32p4]"
