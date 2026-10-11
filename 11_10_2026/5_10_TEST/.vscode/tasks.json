@@ -1,0 +1,39 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "ESP-IDF: Build",
+            "type": "shell",
+            "command": "source $HOME/esp/esp-idf/export.sh && idf.py build",
+            "options": { "cwd": "${workspaceFolder}" },
+            "problemMatcher": []
+        },
+        {
+            "label": "ESP-IDF: Flash",
+            "type": "shell",
+            "command": "source $HOME/esp/esp-idf/export.sh && idf.py -p ${config:idf.port} flash",
+            "options": { "cwd": "${workspaceFolder}" },
+            "problemMatcher": []
+        },
+        {
+            "label": "ESP-IDF: Monitor",
+            "type": "shell",
+            "command": "source $HOME/esp/esp-idf/export.sh && idf.py -p ${config:idf.port} monitor",
+            "options": { "cwd": "${workspaceFolder}" },
+            "problemMatcher": []
+        },
+        {
+            "label": "ESP-IDF: Build and Flash",
+            "dependsOrder": "sequence",
+            "dependsOn": ["ESP-IDF: Build", "ESP-IDF: Flash"],
+            "problemMatcher": []
+        },
+        {
+            "label": "ESP-IDF: Menuconfig",
+            "type": "shell",
+            "command": "source $HOME/esp/esp-idf/export.sh && idf.py menuconfig",
+            "options": { "cwd": "${workspaceFolder}" },
+            "problemMatcher": []
+        }
+    ]
+}

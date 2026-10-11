@@ -1,0 +1,9 @@
+STM32F103 <-> ESP32-S3 expected protocol
+UART1: 115200 8N1, ESP32 RX=18 TX=17
+Frame: AA LEN CMD DATA CRC8(0x07) 55
+Learn: 10 / 11 / 12 / 13
+Check: 20 / 21 / 22 / 23
+ESP replies: FF / 91 / 92 / 93 / A1 / A2 / 94
+RESULT_PASS=0, RESULT_FAIL=1
+VISUAL_RESULT payload: result,u16 patch_fail,u16 patch_total,u16 elapsed_ms,float max_dmin
+POWER_RESULT payload: result,float Imax,float ImaxDev,float Iavg,float IavgDev,u16 elapsed_ms

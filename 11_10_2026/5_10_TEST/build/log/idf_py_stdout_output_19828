@@ -1,0 +1,43 @@
+[1/16] Generating ../../app.js.S
+[2/16] Performing build step for 'bootloader'
+[1/1] C:\Windows\system32\cmd.exe /C "cd /D C:\Users\admin\VEDC\5_10_TEST\5_10_TEST\build\bootloader\esp-idf\esptool_py && C:\Espressif\python_env\idf5.4_py3.11_env\Scripts\python.exe C:/Espressif/frameworks/esp-idf-v5.4.4/components/partition_table/check_sizes.py --offset 0x8000 bootloader 0x0 C:/Users/admin/VEDC/5_10_TEST/5_10_TEST/build/bootloader/bootloader.bin"
+Bootloader binary size 0x51c0 bytes. 0x2e40 bytes (36%) free.
+[3/16] No install step for 'bootloader'
+[4/16] Building ASM object esp-idf/main/CMakeFiles/__idf_main.dir/__/__/app.js.S.obj
+[5/16] Completed 'bootloader'
+[6/16] Building C object esp-idf/main/CMakeFiles/__idf_main.dir/main.c.obj
+[7/16] Building C object esp-idf/main/CMakeFiles/__idf_main.dir/app_ai_coreset.c.obj
+[8/16] Building C object esp-idf/main/CMakeFiles/__idf_main.dir/vedc_controller.c.obj
+[9/16] Building C object esp-idf/main/CMakeFiles/__idf_main.dir/app_web_server.c.obj
+[10/16] Building C object esp-idf/main/CMakeFiles/__idf_main.dir/app_ai_patch.c.obj
+[11/16] Building CXX object esp-idf/main/CMakeFiles/__idf_main.dir/app_ai_infer.cpp.obj
+C:/Users/admin/VEDC/5_10_TEST/5_10_TEST/main/app_ai_infer.cpp: In function 'esp_err_t app_ai_infer_run_all()':
+C:/Users/admin/VEDC/5_10_TEST/5_10_TEST/main/app_ai_infer.cpp:1835:18: warning: unused variable 'input_hash' [-Wunused-variable]
+ 1835 |         uint32_t input_hash = 0;
+      |                  ^~~~~~~~~~
+C:/Users/admin/VEDC/5_10_TEST/5_10_TEST/main/app_ai_infer.cpp:1836:18: warning: unused variable 'q_sat_min' [-Wunused-variable]
+ 1836 |         uint32_t q_sat_min = 0;
+      |                  ^~~~~~~~~
+C:/Users/admin/VEDC/5_10_TEST/5_10_TEST/main/app_ai_infer.cpp:1837:18: warning: unused variable 'q_sat_max' [-Wunused-variable]
+ 1837 |         uint32_t q_sat_max = 0;
+      |                  ^~~~~~~~~
+C:/Users/admin/VEDC/5_10_TEST/5_10_TEST/main/app_ai_infer.cpp:1838:13: warning: unused variable 'q_min' [-Wunused-variable]
+ 1838 |         int q_min = 127;
+      |             ^~~~~
+C:/Users/admin/VEDC/5_10_TEST/5_10_TEST/main/app_ai_infer.cpp:1839:13: warning: unused variable 'q_max' [-Wunused-variable]
+ 1839 |         int q_max = -128;
+      |             ^~~~~
+C:/Users/admin/VEDC/5_10_TEST/5_10_TEST/main/app_ai_infer.cpp:1890:14: warning: unused variable 'reused_input' [-Wunused-variable]
+ 1890 |         bool reused_input = false;
+      |              ^~~~~~~~~~~~
+[12/16] Linking C static library esp-idf\main\libmain.a
+[13/16] Generating ld/sections.ld
+[14/16] Linking CXX executable vedc_esp32s3_uart1_sim.elf
+[15/16] Generating binary image from built executable
+esptool.py v4.11.0
+Creating esp32s3 image...
+Merged 2 ELF sections
+Successfully created esp32s3 image.
+Generated C:/Users/admin/VEDC/5_10_TEST/5_10_TEST/build/vedc_esp32s3_uart1_sim.bin
+[16/16] C:\Windows\system32\cmd.exe /C "cd /D C:\Users\admin\VEDC\5_10_TEST\5_10_TEST\build\esp-idf\esptool_py && C:\Espressif\python_env\idf5.4_py3.11_env\Scripts\python.exe C:/Espressif/frameworks/esp-idf-v5.4.4/components/partition_table/check_sizes.py --offset 0x8000 partition --type app C:/Users/admin/VEDC/5_10_TEST/5_10_TEST/build/partition_table/partition-table.bin C:/Users/admin/VEDC/5_10_TEST/5_10_TEST/build/vedc_esp32s3_uart1_sim.bin"
+vedc_esp32s3_uart1_sim.bin binary size 0x1fe900 bytes. Smallest app partition is 0x300000 bytes. 0x101700 bytes (34%) free.

@@ -1,0 +1,1 @@
+Code Patchcore model chưa hiện diện được patch lỗi 

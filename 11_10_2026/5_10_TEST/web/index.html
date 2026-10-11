@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PTIT NO PROBLEM · Trạm kiểm tra PCB</title>
+  <link rel="icon" type="image/jpeg" href="/ptit-logo.jpg">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand-lockup">
+        <div class="brand-mark"><img src="/ptit-logo.jpg" alt="Logo Học viện Công nghệ Bưu chính Viễn thông"></div>
+        <div class="brand-copy">
+          <div class="eyebrow">HỌC VIỆN CÔNG NGHỆ BƯU CHÍNH VIỄN THÔNG · PTIT</div>
+          <h1>PTIT NO PROBLEM</h1>
+          <p class="subtitle">Trạm kiểm tra ngoại quan và dòng điện PCB <span>ESP32-S3 / STM32F103</span></p>
+        </div>
+      </div>
+      <div class="header-side">
+        <span class="header-label">PCB INSPECTION STATION</span>
+        <div class="master-badge">
+          <span class="dot"></span>
+          <span>STM32 ĐIỀU KHIỂN</span>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="pipeline" aria-label="Quy trình VEDC">
+        <div class="pipeline-step" data-step="LEARN">
+          <span class="step-no">01</span>
+          <div><strong>LEARN</strong><small>5 ảnh + 5 mẫu dòng</small></div>
+          <span class="step-state" id="learn-state">WAIT</span>
+        </div>
+        <div class="pipeline-arrow">›</div>
+        <div class="pipeline-step" data-step="TRAIN">
+          <span class="step-no">02</span>
+          <div><strong>TRAIN</strong><small>Memory Bank + ngưỡng</small></div>
+          <span class="step-state" id="train-state">WAIT</span>
+        </div>
+        <div class="pipeline-arrow">›</div>
+        <div class="pipeline-step" data-step="CHECK">
+          <span class="step-no">03</span>
+          <div><strong>CHECK</strong><small>Visual → Power → Next PCB</small></div>
+          <span class="step-state" id="check-state">WAIT</span>
+        </div>
+      </section>
+
+      <section class="event-strip">
+        <div class="event-main">
+          <span class="live-dot"></span>
+          <span id="event-text">Đang chờ STM32...</span>
+        </div>
+        <div class="event-meta">
+          <span id="board-chip">PCB —</span>
+          <span id="seq-chip">SEQ —</span>
+        </div>
+      </section>
+
+      <section class="camera-grid">
+        <article class="panel live-panel">
+          <div class="panel-head">
+            <div>
+              <span class="panel-kicker">CAMERA / 01</span>
+              <h2>Hình ảnh trực tiếp</h2>
+            </div>
+            <span class="status-pill" id="camera-pill">WAITING</span>
+          </div>
+          <div class="image-stage live-stage">
+            <img id="stream" alt="Live camera">
+            <div class="stage-overlay"><span id="live-message">Đang kết nối camera...</span></div>
+          </div>
+          <div class="panel-foot">
+            <span id="camera-detail">UVC · MJPEG</span>
+            <span>Chỉ giám sát</span>
+          </div>
+        </article>
+
+        <article class="panel inspection-panel">
+          <div class="panel-head">
+            <div>
+              <span class="panel-kicker">PHÂN TÍCH / 02</span>
+              <h2>Ảnh gốc + vùng lỗi</h2>
+            </div>
+            <span class="status-pill neutral" id="visual-pill">NO RESULT</span>
+          </div>
+          <div class="image-stage inspection-stage">
+            <img id="inspection-image" alt="Ảnh inspection gần nhất">
+            <canvas id="overlay" aria-hidden="true"></canvas>
+            <div id="inspection-placeholder" class="empty-state">
+              <strong>Chưa có ảnh inspection</strong>
+              <span>Ảnh sẽ tự xuất hiện sau khi STM32 yêu cầu CAPTURE / VISUAL CHECK.</span>
+            </div>
+            <div id="inspection-working" class="working-state hidden">
+              <div class="spinner"></div>
+              <strong id="working-title">ESP32-S3 đang xử lý...</strong>
+              <span id="working-subtitle">Chờ kết quả AI</span>
+            </div>
+          </div>
+          <div class="panel-foot">
+            <span id="capture-detail">—</span>
+            <span id="overlay-detail">Không có patch lỗi</span>
+          </div>
+        </article>
+      </section>
+
+      <section class="dashboard-grid">
+        <article class="panel process-panel">
+          <div class="panel-head compact">
+            <div>
+              <span class="panel-kicker">TRẠNG THÁI HỆ THỐNG</span>
+              <h2 id="stage-title">STANDBY</h2>
+            </div>
+            <span class="stage-code" id="stage-code">STANDBY</span>
+          </div>
+
+          <div class="process-message" id="process-message">Chờ lệnh từ STM32.</div>
+
+          <div class="progress-block">
+            <div class="progress-label"><span>Visual samples</span><strong id="learn-visual-progress">0 / 5</strong></div>
+            <div class="progress-track"><span id="learn-visual-bar"></span></div>
+          </div>
+          <div class="progress-block">
+            <div class="progress-label"><span>Power samples</span><strong id="learn-power-progress">0 / 5</strong></div>
+            <div class="progress-track"><span id="learn-power-bar"></span></div>
+          </div>
+
+          <div class="signal-grid">
+            <div class="signal-card"><span>Camera</span><strong id="camera-status">—</strong></div>
+            <div class="signal-card"><span>AI</span><strong id="ai-status">—</strong></div>
+            <div class="signal-card"><span>Memory Bank</span><strong id="bank-status">—</strong></div>
+            <div class="signal-card"><span>Last capture</span><strong id="capture-id">—</strong></div>
+          </div>
+        </article>
+      </section>
+
+      <section class="summary-grid">
+        <article class="panel summary-panel">
+          <div class="panel-head compact">
+            <div>
+              <span class="panel-kicker">KẾT QUẢ MỚI NHẤT</span>
+              <h2>Tổng kết PCB gần nhất</h2>
+            </div>
+            <span class="board-large" id="summary-board">#—</span>
+          </div>
+          <div class="result-banner neutral" id="summary-banner">
+            <strong id="summary-text">CHƯA CÓ</strong>
+            <span id="summary-sub">Chưa hoàn tất PCB nào trong phiên CHECK này.</span>
+          </div>
+          <div class="summary-cols">
+            <div class="summary-block">
+              <h3>Ngoại quan</h3>
+              <dl>
+                <div><dt>Kết quả</dt><dd id="sum-visual">—</dd></div>
+                <div><dt>Patch lỗi</dt><dd id="sum-patches">—</dd></div>
+                <div><dt>Điểm lỗi cao nhất / ngưỡng</dt><dd id="sum-dmin">—</dd></div>
+                <div><dt>Thời gian AI</dt><dd id="sum-vtime">—</dd></div>
+              </dl>
+            </div>
+            <div class="summary-block">
+              <h3>Dòng điện</h3>
+              <dl>
+                <div><dt>Kết quả</dt><dd id="sum-power">—</dd></div>
+                <div><dt>Imax đo</dt><dd id="sum-imax">—</dd></div>
+                <div><dt>Iavg đo</dt><dd id="sum-iavg">—</dd></div>
+                <div><dt>Thời gian</dt><dd id="sum-ptime">—</dd></div>
+              </dl>
+            </div>
+          </div>
+          <div class="summary-totals" id="summary-totals">Đã kiểm 0 PCB · PASS 0 · FAIL 0</div>
+        </article>
+
+        <article class="panel history-panel">
+          <div class="panel-head compact">
+            <div>
+              <span class="panel-kicker">NHẬT KÝ KIỂM TRA</span>
+              <h2>Lịch sử PCB (8 gần nhất)</h2>
+            </div>
+          </div>
+          <div class="history-scroll">
+            <table class="history-table">
+              <thead>
+                <tr><th>PCB</th><th>Ngoại quan</th><th>Patch lỗi</th><th>Imax</th><th>Iavg</th><th>Tổng kết</th></tr>
+              </thead>
+              <tbody id="history-body">
+                <tr><td colspan="6" class="history-empty">Chưa có PCB nào hoàn tất.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+      </section>
+
+      <section class="bottom-grid">
+        <article class="panel training-panel">
+          <div class="panel-head compact">
+            <div>
+              <span class="panel-kicker">THAM SỐ MÔ HÌNH</span>
+              <h2>Memory Bank</h2>
+            </div>
+            <span class="status-pill" id="model-pill">NOT TRAINED</span>
+          </div>
+          <div class="training-stats">
+            <div><span>Bank vectors</span><strong id="train-bank">—</strong></div>
+            <div><span>Ngưỡng điểm lỗi</span><strong id="train-threshold">—</strong></div>
+            <div><span>Imax deviation</span><strong id="train-imax-dev">—</strong></div>
+            <div><span>Iavg deviation</span><strong id="train-iavg-dev">—</strong></div>
+            <div><span>Train time</span><strong id="train-time">—</strong></div>
+          </div>
+        </article>
+
+        <article class="panel patches-panel">
+          <div class="panel-head compact">
+            <div>
+              <span class="panel-kicker">VÙNG CẦN CHÚ Ý</span>
+              <h2>Patch lỗi nổi bật</h2>
+            </div>
+            <span class="danger-count" id="danger-count">0</span>
+          </div>
+          <div id="patch-list" class="patch-list">
+            <div class="patch-empty" id="patch-empty">Khi visual FAIL, các patch vượt ngưỡng sẽ xuất hiện ở đây.</div>
+          </div>
+        </article>
+      </section>
+
+      <section class="footer-note">
+        <span>PTIT NO PROBLEM · PCB INSPECTION</span>
+        <span>ESP32-S3 xử lý ảnh · STM32 điều khiển trình tự kiểm tra</span>
+      </section>
+    </main>
+  </div>
+  <script src="/app.js"></script>
+</body>
+</html>
